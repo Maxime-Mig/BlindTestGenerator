@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+sqlalchemy
+pydub
+python-multipart
+python-dotenv
+shutil
