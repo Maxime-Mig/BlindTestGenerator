@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import axios from 'axios'
-import { Play, Pause, Check, X, RefreshCw, Volume2 } from 'lucide-vue-next'
+import { Play, Pause, Check, X, RefreshCw, Volume2, Home } from 'lucide-vue-next'
 
-const API_URL = 'http://localhost:3000/api/game'
+const API_URL = 'http://localhost:8000/api/game'
+const router = useRouter()
+const route = useRoute()
 
 interface Song {
   songId: number
@@ -15,6 +18,13 @@ interface Result {
   title: string
   artist: string
 }
+
+const filters = computed(() => {
+  if (route.query.filters) {
+    return JSON.parse(route.query.filters as string)
+  }
+  return { types: [], difficulties: [] }
+})
 
 const loading = ref(false)
 const currentSong = ref<Song | null>(null)
@@ -29,11 +39,16 @@ const startNewRound = async () => {
   guess.value = ''
   isPlaying.value = false
   try {
-    const res = await axios.get(`${API_URL}/start`)
+    // Build query params
+    const params = new URLSearchParams()
+    filters.value.types.forEach((t: string) => params.append('types', t))
+    filters.value.difficulties.forEach((d: string) => params.append('difficulties', d))
+    
+    const res = await axios.get(`${API_URL}/start`, { params })
     currentSong.value = res.data
     // Reset audio
     if (audioRef.value) {
-      audioRef.value.src = `http://localhost:3000${res.data.clipUrl}`
+      audioRef.value.src = `http://localhost:8000${res.data.clipUrl}`
       audioRef.value.load()
     }
   } catch (err) {
@@ -71,6 +86,10 @@ const handleSubmit = async () => {
   }
 }
 
+const goHome = () => {
+  router.push('/')
+}
+
 // Handle audio ended
 const handleEnded = () => {
   isPlaying.value = false
@@ -91,7 +110,18 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6">
+  <div class="w-full max-w-2xl bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 overflow-hidden p-6 relative">
+    <!-- Home Button -->
+    <button
+      @click="goHome"
+      class="absolute top-4 left-4 p-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors flex items-center gap-2 text-slate-300 hover:text-white"
+      title="Back to home"
+    >
+      <Home :size="20" />
+      <span class="text-sm font-medium">Home</span>
+    </button>
+
+    <div class="flex flex-col gap-6 mt-8">
     <div v-if="loading && !currentSong" class="text-center py-10 text-slate-300">
       Loading next song...
     </div>
@@ -157,5 +187,6 @@ onUnmounted(() => {
         </button>
       </div>
     </template>
+    </div>
   </div>
 </template>

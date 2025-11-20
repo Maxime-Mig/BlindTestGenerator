@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Song {
-  id        Int      @id @default(autoincrement())
-  title     String
-  artist    String
-  genre     String?
-  filePath  String   @unique
-  duration  Float?
-  createdAt DateTime @default(now())
+  id          Int      @id @default(autoincrement())
+  title       String
+  artist      String
+  filePath    String   @unique
+  sourceType  String?  // Anime, Game, Movie, Series
+  difficulty  String?  // Easy, Normal, Hard
+  createdAt   DateTime @default(now())
 }

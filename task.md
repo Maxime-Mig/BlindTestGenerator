@@ -1,0 +1,26 @@
+# Task List
+
+- [x] Explore existing project structure <!-- id: 0 -->
+- [x] Create implementation plan <!-- id: 1 -->
+- [x] Backend changes <!-- id: 2 -->
+    - [x] Update API to support multiple types and difficulties <!-- id: 3 -->
+    - [x] Verify backend changes <!-- id: 4 -->
+- [x] Frontend changes <!-- id: 5 -->
+    - [x] Create new main page for selection <!-- id: 6 -->
+    - [x] Implement multi-select for types and difficulties <!-- id: 7 -->
+    - [x] Update game page to use selected parameters <!-- id: 8 -->
+    - [x] Verify frontend changes <!-- id: 9 -->
+- [x] Verify full flow <!-- id: 10 -->
+- [x] Environment Setup <!-- id: 11 -->
+    - [x] Install Node.js <!-- id: 12 -->
+    - [x] Add home button to GameInterface <!-- id: 27 -->
+    - [x] Create walkthrough <!-- id: 28 -->
+- [x] Migrate Backend to TypeScript <!-- id: 29 -->
+    - [x] Analyze Python backend <!-- id: 30 -->
+    - [x] Create implementation plan <!-- id: 31 -->
+    - [x] Update Prisma schema <!-- id: 32 -->
+    - [x] Implement audio service <!-- id: 33 -->
+    - [x] Create game routes <!-- id: 34 -->
+    - [x] Update main server file <!-- id: 35 -->
+    - [x] Archive Python backend <!-- id: 36 -->
+    - [x] Test TypeScript backend <!-- id: 37 -->

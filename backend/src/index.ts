@@ -1,26 +1,24 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import { scanLibrary, startRound, checkGuess } from './controllers/gameController';
+import gameRoutes from './routes/gameRoutes';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 app.use(cors());
 app.use(express.json());
 
 // Serve static clips
-app.use('/clips', express.static(path.join(__dirname, '../public/clips')));
+app.use('/static', express.static(path.join(__dirname, '../../backend/static')));
 
 // Routes
-app.post('/api/scan', scanLibrary);
-app.get('/api/game/start', startRound);
-app.post('/api/game/guess', checkGuess);
+app.use('/api/game', gameRoutes);
 
 app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`🚀 TypeScript backend running on http://localhost:${PORT}`);
 });
