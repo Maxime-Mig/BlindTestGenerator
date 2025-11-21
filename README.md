@@ -39,7 +39,7 @@ A modern, web-based blind test game that uses your local music library.
    cd backend
    npm run dev
    ```
-   The API will run at `http://localhost:3000`.
+   The API will run at `http://localhost:8000`.
 
 2. **Start the Frontend**
    ```bash
