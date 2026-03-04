@@ -1,25 +1,16 @@
 <script setup lang="ts">
-import { Music } from 'lucide-vue-next'
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-900 text-white flex flex-col items-center justify-center p-4 font-sans">
-    <header class="mb-8 text-center">
-      <div class="flex items-center justify-center gap-3 mb-2">
-        <Music class="w-10 h-10 text-purple-500" />
-        <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-          Blind Test Generator
-        </h1>
-      </div>
-      <p class="text-slate-400">Test your musical knowledge!</p>
-    </header>
+  <!-- Full-bleed background -->
+  <div class="relative min-h-screen font-sans overflow-hidden text-white select-none bg-[#0d0d1a]">
+    <!-- Background image -->
+    <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.85]"
+         style="background-image: url('/bg.png');"></div>
+    <!-- Gradient vignette -->
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_50%,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0.65)_100%)]"></div>
 
-    <main class="w-full flex justify-center">
-      <router-view />
-    </main>
-    
-    <footer class="mt-12 text-slate-500 text-sm">
-      Powered by Python & Vue 3
-    </footer>
+    <RouterView />
   </div>
 </template>

@@ -1,22 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SelectionPage from '../components/SelectionPage.vue'
-import GameInterface from '../components/GameInterface.vue'
+import HomeView from '../views/HomeView.vue'
+import RoomView from '../views/RoomView.vue'
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
             name: 'home',
-            component: SelectionPage
+            component: HomeView
         },
         {
-            path: '/game',
-            name: 'game',
-            component: GameInterface,
-            props: route => ({
-                filters: route.query.filters ? JSON.parse(route.query.filters as string) : { types: [], difficulties: [] }
-            })
+            path: '/:code',
+            name: 'room',
+            component: RoomView
         }
     ]
 })
