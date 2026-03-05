@@ -46,18 +46,26 @@ watch(room, (newRoom) => {
     }
   }
 });
+
+// Auto-clear error message after 4 seconds
+watch(roomError, (newVal) => {
+  if (newVal) {
+    setTimeout(() => {
+      roomError.value = '';
+    }, 4000);
+  }
+});
 </script>
 
 <template>
   <div class="relative z-10 flex flex-col items-center justify-center min-h-screen pt-24 pb-12 px-4">
     
     <!-- Title Section (Top Center) -->
-    <div class="absolute top-8 left-1/2 -translate-x-1/2 text-center w-full">
-      <h1 class="text-5xl md:text-7xl font-black text-white [text-shadow:0_2px_0_rgba(0,0,0,0.8),0_4px_12px_rgba(0,0,0,0.6)] tracking-tight">
-        BLIND<span class="text-amber-400">TEST</span>
+    <RouterLink to="/" class="absolute top-8 left-1/2 -translate-x-1/2 text-center w-full group cursor-pointer">
+      <h1 class="text-5xl md:text-7xl font-black text-white [text-shadow:0_2px_0_rgba(0,0,0,0.8),0_4px_12px_rgba(0,0,0,0.6)] tracking-tight group-hover:text-amber-400 transition-colors">
+        BLIND<span class="text-amber-400 group-hover:text-white">TEST</span>
       </h1>
-      <p class="text-white/50 text-xs md:text-sm mt-2 tracking-[6px] uppercase font-bold">Geek Culture Edition</p>
-    </div>
+    </RouterLink>
 
     <!-- Main Content Container (Side by Side on large screens) -->
     <div class="flex flex-col lg:flex-row items-center lg:items-stretch justify-center gap-10 lg:gap-16 w-full max-w-5xl mt-6">
@@ -72,10 +80,10 @@ watch(room, (newRoom) => {
         </div>
         
         <div class="w-full flex flex-col gap-3">
-          <p class="text-amber-300/80 text-center text-sm uppercase tracking-widest font-bold">Ton pseudo</p>
+          <p class="text-amber-300 text-center text-sm uppercase tracking-widest font-bold">Ton pseudo</p>
           <input v-model="usernameInput" @input="updateUsername" type="text"
-                 placeholder="Ex: Naruto_Fan42" maxlength="20" autofocus
-                 class="w-full bg-black/90 border border-white/20 text-center text-white placeholder:text-white/25 px-4 py-4 text-xl font-bold outline-none focus:border-amber-400/60 transition-colors shadow-inner" />
+                 placeholder="Ex: PetitPseudoCool" maxlength="20" autofocus
+                 class="w-full bg-black/90 border border-white/20 text-center text-white placeholder:text-white px-4 py-4 text-xl font-bold outline-none focus:border-amber-400/60 transition-colors shadow-inner" />
         </div>
       </div>
 
@@ -84,10 +92,9 @@ watch(room, (newRoom) => {
         <!-- Create Room -->
         <button @click="createRoom" :disabled="isCreating || !usernameInput.trim()" 
                 class="flex items-center gap-5 p-6 bg-[#080602]/95 border border-amber-400/25 border-l-4 border-l-amber-400/70 transition-all duration-150 cursor-pointer w-full hover:bg-black hover:border-amber-400/60 hover:translate-x-[3px] group disabled:opacity-50 disabled:cursor-not-allowed">
-          <span class="text-4xl shrink-0 group-hover:scale-110 transition-transform">🎮</span>
           <div class="text-left flex-1">
             <p class="font-bold text-xl text-white group-hover:text-amber-300 transition-colors">Créer une partie</p>
-            <p class="text-white/40 text-sm mt-1">Génère un code à partager</p>
+            <p class="text-white text-sm mt-1">Génère un code à partager</p>
           </div>
         </button>
 
@@ -95,26 +102,32 @@ watch(room, (newRoom) => {
         <div class="flex flex-col gap-5 p-6 bg-[#080602]/95 border border-amber-400/25 border-l-4 border-l-amber-400/70 transition-all duration-150 w-full hover:bg-black hover:border-amber-400/50"
              :class="{ 'opacity-50 pointer-events-none grayscale-[50%]': !usernameInput.trim() }">
           <div class="flex items-center gap-5">
-            <span class="text-4xl shrink-0">🔗</span>
             <div>
               <p class="font-bold text-xl text-white">Rejoindre</p>
-              <p class="text-white/40 text-sm mt-1">Entre le code du salon</p>
+              <p class="text-white text-sm mt-1">Entre le code du salon</p>
             </div>
           </div>
           <div class="flex gap-3 w-full mt-2">
             <input v-model="joinCodeInput" @keydown.enter="joinRoom" type="text"
                    placeholder="CODE" maxlength="5"
-                   class="flex-1 w-0 min-w-0 bg-black/90 border border-white/20 text-white placeholder:text-white/25 px-4 py-3 text-lg outline-none focus:border-amber-400/60 transition-colors uppercase tracking-[0.2em] text-center font-black shadow-inner" />
+                   class="flex-1 w-0 min-w-0 bg-black/90 border border-white/20 text-white placeholder:text-white px-4 py-3 text-lg outline-none focus:border-amber-400/60 transition-colors uppercase tracking-[0.2em] text-center font-black shadow-inner" />
             <button @click="joinRoom" :disabled="!joinCodeInput.trim() || !usernameInput.trim()" 
                     class="shrink-0 whitespace-nowrap bg-gradient-to-br from-amber-500 to-amber-700 text-[#0d0d1a] font-black text-sm tracking-widest uppercase py-3 px-5 border border-amber-400/50 transition-all duration-150 shadow-[0_4px_16px_rgba(251,191,36,0.25)] hover:from-amber-600 hover:to-amber-800 hover:-translate-y-[1px] active:scale-[0.97] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center">
               OK →
             </button>
           </div>
         </div>
-        
-        <p v-if="roomError" class="text-red-400 text-sm font-bold mt-1 text-center bg-black/60 py-2 border border-red-500/30 rounded backdrop-blur-sm shadow-lg">⚠ {{ roomError }}</p>
       </div>
-
     </div>
+
+    <!-- Error Notification (Floating Toast) -->
+    <transition enter-active-class="transition-all duration-300 transform" enter-from-class="opacity-0 -translate-y-4"
+                leave-active-class="transition-all duration-300 transform" leave-to-class="opacity-0 -translate-y-4">
+      <div v-if="roomError" class="fixed top-24 left-1/2 -translate-x-1/2 bg-red-500 text-white px-8 py-3 rounded-xl font-bold text-lg shadow-[0_0_30px_rgba(239,68,68,0.4)] z-[100] flex items-center gap-3 border border-white/20">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        {{ roomError }}
+      </div>
+    </transition>
+
   </div>
 </template>
