@@ -10,6 +10,8 @@ import { RouterView } from 'vue-router';
          style="background-image: url('/bg.png');"></div>
     <!-- Gradient vignette -->
     <div class="absolute inset-0 bg-[radial-gradient(ellipse_60%_70%_at_50%_50%,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0.65)_100%)]"></div>
+    <!-- Black semi-transparent overlay -->
+    <div class="absolute inset-0 bg-black/40"></div>
 
     <RouterView />
   </div>

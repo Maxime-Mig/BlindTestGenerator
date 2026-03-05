@@ -7,3 +7,4 @@ _bmad-output
 node_modules
 .gitignore
 backend/node_modules
+backend/public/audio
